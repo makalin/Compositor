@@ -5,6 +5,10 @@ DerivedData/
 *.xcarchive
 *.dmg
 
+# .NET
+**/bin/
+**/obj/
+
 # Xcode per-user state
 xcuserdata/
 *.xcuserstate

@@ -4,7 +4,12 @@ Adobe Photoshop costs too much and tools like GIMP don’t feel familiar enough 
 
 The goal was to create a full-featured image editor that is completely free and open source. I use Photoshop for compositing and post-processing, so Compositor is built around that workflow - with the tools needed to create a pixel-perfect final image.
 
-Because it’s open source, you can download the Xcode project and add, remove, or modify any feature to fit your workflow.
+There are two apps:
+
+- **Mac** is the original native app (Swift, AppKit, SwiftUI, and Metal).
+- **PC** is the Windows app. It uses the same editor layout, the same tools, and the same `.comp` project package so a project saved on one platform opens on the other.
+
+Because it’s open source, you can download the project and add, remove, or modify any feature to fit your workflow.
 
 ## Features
 
@@ -61,16 +66,30 @@ Because it’s open source, you can download the Xcode project and add, remove, 
 
 ## Requirements
 
+### Mac
 - macOS 26.5 or later
 - Xcode 26 or later (to build from source)
 
+### PC
+- Windows 10 or later
+- .NET 8 SDK
+
 ## Building
 
-Open `Compositor.xcodeproj` and run the **Compositor** scheme.
+### Mac
+Open `Mac/Compositor.xcodeproj` and run the **Compositor** scheme.
+
+### PC
+```bash
+dotnet build PC/Compositor.sln
+dotnet run --project PC/Compositor/Compositor.csproj
+```
+
+The Windows editor uses the same layout and shortcuts (Ctrl in place of ⌘): layers and folders, blend modes, masks, clipping, transform handles, the tool row, selections, brush, heal, clone, blur, gradient, shapes, type, adjustments, and `.comp` projects. Camera Raw, PSD import, and the Mac Metal effects renderer stay in the Mac app; effect settings already stored in a project are kept when the Windows app saves it.
 
 ## Releasing
 
-`scripts/release.sh` builds a Release version, signs it with Developer ID, notarizes and staples it, and packages it into `dist/Compositor-<version>.dmg`.
+`Mac/scripts/release.sh` builds a Release version, signs it with Developer ID, notarizes and staples it, and packages it into `dist/Compositor-<version>.dmg`.
 
 It needs, all kept outside this repository:
 

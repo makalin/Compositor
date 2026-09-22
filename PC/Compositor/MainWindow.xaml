@@ -1,0 +1,192 @@
+<Window x:Class="Compositor.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:Compositor"
+        Title="Compositor" Width="1280" Height="960" MinWidth="960" MinHeight="720"
+        Background="#242424" Foreground="#F2F2F2" WindowStartupLocation="CenterScreen"
+        PreviewKeyDown="OnPreviewKeyDown" KeyUp="OnKeyUp" AllowDrop="True" Drop="OnDrop" DragOver="OnDragOver">
+    <DockPanel>
+        <Menu DockPanel.Dock="Top" Background="#2C2C2C" Foreground="#F2F2F2">
+            <MenuItem Header="_File">
+                <MenuItem Header="_New Canvas…" InputGestureText="Ctrl+N" Click="OnNew"/>
+                <MenuItem Header="_Open Project…" InputGestureText="Ctrl+O" Click="OnOpen"/>
+                <MenuItem Header="_Import Images…" Click="OnImport"/>
+                <Separator/>
+                <MenuItem x:Name="SaveItem" Header="_Save" InputGestureText="Ctrl+S" Click="OnSave"/>
+                <MenuItem x:Name="SaveAsItem" Header="Save _As…" InputGestureText="Ctrl+Shift+S" Click="OnSaveAs"/>
+                <Separator/>
+                <MenuItem x:Name="ExportPngItem" Header="Export _PNG…" InputGestureText="Ctrl+Shift+E" Click="OnExportPng"/>
+                <MenuItem x:Name="ExportJpegItem" Header="Export _JPEG…" InputGestureText="Ctrl+Shift+J" Click="OnExportJpeg"/>
+                <Separator/>
+                <MenuItem x:Name="CloseItem" Header="_Close Project" InputGestureText="Ctrl+W" Click="OnClose"/>
+                <Separator/>
+                <MenuItem Header="E_xit" Click="OnExit"/>
+            </MenuItem>
+            <MenuItem Header="_Edit">
+                <MenuItem x:Name="UndoItem" Header="_Undo" InputGestureText="Ctrl+Z" Click="OnUndo"/>
+                <MenuItem x:Name="RedoItem" Header="_Redo" InputGestureText="Ctrl+Shift+Z" Click="OnRedo"/>
+                <Separator/>
+                <MenuItem x:Name="CutItem" Header="Cu_t" InputGestureText="Ctrl+X" Click="OnCut"/>
+                <MenuItem x:Name="CopyItem" Header="_Copy" InputGestureText="Ctrl+C" Click="OnCopy"/>
+                <MenuItem x:Name="CopyMergedItem" Header="Copy _Merged" InputGestureText="Ctrl+Shift+C" Click="OnCopyMerged"/>
+                <MenuItem x:Name="PasteItem" Header="_Paste" InputGestureText="Ctrl+V" Click="OnPaste"/>
+                <Separator/>
+                <MenuItem x:Name="FillFgItem" Header="Fill with _Foreground" InputGestureText="Alt+Backspace" Click="OnFillFg"/>
+                <MenuItem x:Name="FillBgItem" Header="Fill with _Background" InputGestureText="Ctrl+Backspace" Click="OnFillBg"/>
+                <MenuItem x:Name="ClearItem" Header="Clear Selection Pixels" Click="OnClearPixels"/>
+            </MenuItem>
+            <MenuItem Header="_Image">
+                <MenuItem x:Name="LevelsItem" Header="_Levels…" InputGestureText="Ctrl+L" Click="OnLevels"/>
+                <MenuItem x:Name="HueItem" Header="_Hue/Saturation…" InputGestureText="Ctrl+U" Click="OnHue"/>
+                <MenuItem x:Name="ExposureItem" Header="_Exposure…" Click="OnExposure"/>
+                <MenuItem x:Name="GrayItem" Header="_Black &amp; White" Click="OnGray"/>
+                <MenuItem x:Name="InvertItem" Header="_Invert" InputGestureText="Ctrl+I" Click="OnInvert"/>
+                <Separator/>
+                <MenuItem x:Name="CanvasSizeItem" Header="_Canvas Size…" Click="OnCanvasSize"/>
+                <MenuItem x:Name="ImageSizeItem" Header="Image Si_ze…" Click="OnImageSize"/>
+                <MenuItem x:Name="TrimItem" Header="_Trim…" Click="OnTrim"/>
+                <Separator/>
+                <MenuItem x:Name="FlipCanvasHItem" Header="Flip Canvas _Horizontal" Click="OnFlipCanvasH"/>
+                <MenuItem x:Name="FlipCanvasVItem" Header="Flip Canvas _Vertical" Click="OnFlipCanvasV"/>
+            </MenuItem>
+            <MenuItem Header="_Layer">
+                <MenuItem x:Name="NewLayerItem" Header="_New Layer" InputGestureText="Ctrl+Shift+N" Click="OnNewLayer"/>
+                <MenuItem x:Name="GroupItem" Header="New _Group" Click="OnGroup"/>
+                <MenuItem x:Name="DuplicateItem" Header="_Duplicate Layer" Click="OnDuplicate"/>
+                <MenuItem x:Name="DeleteLayerItem" Header="Delete Layer" Click="OnDeleteLayer"/>
+                <MenuItem x:Name="MergeItem" Header="_Merge Down" InputGestureText="Ctrl+E" Click="OnMerge"/>
+                <Separator/>
+                <MenuItem x:Name="RenameItem" Header="_Rename…" Click="OnRename"/>
+                <MenuItem x:Name="MaskItem" Header="Add Layer _Mask" Click="OnMask"/>
+                <MenuItem x:Name="InvertMaskItem" Header="Invert Mask" Click="OnInvertMask"/>
+                <Separator/>
+                <MenuItem x:Name="FlipLayerHItem" Header="Flip Layer Horizontal" Click="OnFlipLayerH"/>
+                <MenuItem x:Name="FlipLayerVItem" Header="Flip Layer Vertical" Click="OnFlipLayerV"/>
+            </MenuItem>
+            <MenuItem Header="_Select">
+                <MenuItem x:Name="AllItem" Header="_All" InputGestureText="Ctrl+A" Click="OnSelectAll"/>
+                <MenuItem x:Name="DeselectItem" Header="_Deselect" InputGestureText="Ctrl+D" Click="OnDeselect"/>
+                <MenuItem x:Name="InverseItem" Header="_Inverse" InputGestureText="Ctrl+Shift+I" Click="OnInverse"/>
+                <MenuItem x:Name="LayerPixelsItem" Header="_Layer's Pixels" Click="OnLayerPixels"/>
+                <Separator/>
+                <MenuItem x:Name="ExpandItem" Header="_Expand…" Click="OnExpand"/>
+                <MenuItem x:Name="ContractItem" Header="_Contract…" Click="OnContract"/>
+                <MenuItem x:Name="FeatherItem" Header="_Feather…" Click="OnFeather"/>
+            </MenuItem>
+            <MenuItem Header="_Filter">
+                <MenuItem x:Name="BlurItem" Header="_Gaussian Blur…" Click="OnBlur"/>
+                <MenuItem x:Name="MotionItem" Header="_Motion Blur…" Click="OnMotion"/>
+                <MenuItem x:Name="NoiseItem" Header="Add _Noise…" Click="OnNoise"/>
+            </MenuItem>
+            <MenuItem Header="_View">
+                <MenuItem x:Name="FitItem" Header="_Fit Canvas" InputGestureText="Ctrl+0" Click="OnFit"/>
+                <MenuItem x:Name="ActualItem" Header="_Actual Pixels" InputGestureText="Ctrl+1" Click="OnActual"/>
+                <MenuItem x:Name="ZoomInItem" Header="Zoom _In" InputGestureText="Ctrl++" Click="OnZoomIn"/>
+                <MenuItem x:Name="ZoomOutItem" Header="Zoom _Out" InputGestureText="Ctrl+-" Click="OnZoomOut"/>
+                <Separator/>
+                <MenuItem x:Name="RulersItem" Header="_Rulers" IsCheckable="True" IsChecked="True" Click="OnRulers"/>
+                <MenuItem x:Name="GridItem" Header="_Grid" IsCheckable="True" Click="OnGrid"/>
+                <MenuItem x:Name="GuidesItem" Header="G_uides" IsCheckable="True" IsChecked="True" Click="OnGuides"/>
+                <MenuItem x:Name="SnapItem" Header="_Snap" IsCheckable="True" IsChecked="True" Click="OnSnap"/>
+                <MenuItem Header="_Clear Guides" Click="OnClearGuides"/>
+            </MenuItem>
+        </Menu>
+        <Border DockPanel.Dock="Top" Background="#242424" BorderBrush="#3A3A3A" BorderThickness="0,0,0,1" Padding="8,0" MinHeight="42" x:Name="HeaderBar">
+            <DockPanel>
+                <Button DockPanel.Dock="Left" Style="{StaticResource QuietButton}" Width="36" Click="OnNew" ToolTip="New canvas (Ctrl+N)" x:Name="NewCanvasButton"/>
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button Content="Fit" Style="{StaticResource QuietButton}" Margin="0,0,2,0" Click="OnFit" ToolTip="Fit canvas (Ctrl+0)"/>
+                    <Button Content="100%" Style="{StaticResource QuietButton}" Margin="0,0,2,0" Click="OnActual" ToolTip="Actual pixels (Ctrl+1)"/>
+                    <Button Style="{StaticResource QuietButton}" Width="32" Margin="0,0,2,0" Click="OnZoomIn" ToolTip="Zoom in" x:Name="ZoomInButton"/>
+                    <Button Style="{StaticResource QuietButton}" Width="32" Click="OnZoomOut" ToolTip="Zoom out" x:Name="ZoomOutButton"/>
+                </StackPanel>
+                <StackPanel x:Name="HeaderHost" Orientation="Horizontal" VerticalAlignment="Center"/>
+            </DockPanel>
+        </Border>
+        <Border DockPanel.Dock="Bottom" Background="#242424" BorderBrush="#3A3A3A" BorderThickness="0,1,0,0" Height="30" Padding="16,0">
+            <TextBlock x:Name="StatusText" VerticalAlignment="Center" Foreground="#A0A0A0" FontSize="11"/>
+        </Border>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="56"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="6"/>
+                <ColumnDefinition Width="252" MinWidth="200" MaxWidth="420"/>
+            </Grid.ColumnDefinitions>
+            <Border Grid.Column="0" Background="#242424" BorderBrush="#3A3A3A" BorderThickness="0,0,1,0">
+                <DockPanel>
+                    <Grid DockPanel.Dock="Bottom" Width="36" Height="48" Margin="0,8,0,16" HorizontalAlignment="Center">
+                        <Border Width="26" Height="26" CornerRadius="7" Background="Black" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="11,11,0,0"/>
+                        <Border x:Name="BackgroundSwatch" Width="24" Height="24" CornerRadius="6" Background="White" BorderBrush="White" BorderThickness="1.5" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="12,12,0,0" MouseLeftButtonUp="OnBackground" ToolTip="Background color" Cursor="Hand"/>
+                        <Border Width="26" Height="26" CornerRadius="7" Background="Black" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="-1,-1,0,0"/>
+                        <Border x:Name="ForegroundSwatch" Width="24" Height="24" CornerRadius="6" Background="Black" BorderBrush="White" BorderThickness="1.5" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonUp="OnForeground" ToolTip="Foreground color" Cursor="Hand"/>
+                        <Button Style="{StaticResource QuietButton}" Width="14" Height="14" Padding="0" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,-2,-2,0" Click="OnSwapColors" ToolTip="Swap foreground and background (X)" x:Name="SwapColorsButton"/>
+                        <Button Style="{StaticResource QuietButton}" Width="14" Height="14" Padding="0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="-2,0,0,-2" Click="OnResetColors" ToolTip="Default colors (D)" x:Name="ResetColorsButton"/>
+                    </Grid>
+                    <Viewbox Stretch="Uniform" StretchDirection="DownOnly" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,10,0,4">
+                        <StackPanel x:Name="ToolRail" Width="36"/>
+                    </Viewbox>
+                </DockPanel>
+            </Border>
+            <Grid Grid.Column="1">
+                <local:EditorCanvas x:Name="CanvasView"/>
+                <Border x:Name="Welcome" Background="#242424" Visibility="Visible">
+                    <StackPanel Width="420" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <TextBlock Text="New canvas" FontSize="22" FontWeight="SemiBold"/>
+                        <TextBlock Text="A blank space for your next composition." Foreground="#A0A0A0" Margin="0,6,0,18"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                            <TextBlock Text="Width" VerticalAlignment="Center" Width="52"/>
+                            <TextBox x:Name="WelcomeWidth" Text="1920" Width="100" Margin="0,0,16,0"/>
+                            <TextBlock Text="Height" VerticalAlignment="Center" Width="52"/>
+                            <TextBox x:Name="WelcomeHeight" Text="1080" Width="100"/>
+                        </StackPanel>
+                        <TextBlock Text="Transparent canvas · sRGB" Foreground="#A0A0A0" Margin="0,0,0,16"/>
+                        <StackPanel Orientation="Horizontal">
+                            <Button Content="Open project" Margin="0,0,8,0" Click="OnOpen"/>
+                            <Button Content="Import image" Margin="0,0,8,0" Click="OnImport"/>
+                            <Button Content="Create canvas" Click="OnCreateWelcome"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </Grid>
+            <GridSplitter Grid.Column="2" Width="6" HorizontalAlignment="Stretch" Background="#333"/>
+            <DockPanel Grid.Column="3" Background="#242424">
+                <DockPanel DockPanel.Dock="Top" Margin="18,16,18,10">
+                    <TextBlock Text="Layers" FontSize="12" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                    <TextBlock x:Name="LayerCount" HorizontalAlignment="Right" FontSize="11" Foreground="#8A8A8A" VerticalAlignment="Center"/>
+                </DockPanel>
+                <Border DockPanel.Dock="Top" Height="1" Background="#3A3A3A"/>
+                <StackPanel x:Name="AppearanceHost" DockPanel.Dock="Top" Margin="12,10,12,10">
+                    <DockPanel Margin="0,0,0,8">
+                        <TextBlock Text="Blend" Width="58" VerticalAlignment="Center" FontSize="12" Foreground="#A0A0A0"/>
+                        <ComboBox x:Name="BlendBox" Height="24"/>
+                    </DockPanel>
+                    <DockPanel>
+                        <TextBlock Text="Opacity" Width="58" VerticalAlignment="Center" FontSize="12" Foreground="#A0A0A0"/>
+                        <TextBox x:Name="OpacityBox" Width="44" DockPanel.Dock="Right" Text="100" FontSize="12" Padding="2,1" TextAlignment="Right" LostFocus="OnOpacityTyped"/>
+                        <TextBlock Text="%" DockPanel.Dock="Right" VerticalAlignment="Center" Margin="4,0,6,0" Foreground="#A0A0A0" FontSize="12"/>
+                        <Slider x:Name="OpacitySlider" Minimum="0" Maximum="100" Value="100" VerticalAlignment="Center" ValueChanged="OnOpacityChanged"/>
+                    </DockPanel>
+                </StackPanel>
+                <Border DockPanel.Dock="Top" Height="1" Background="#3A3A3A"/>
+                <Border DockPanel.Dock="Bottom" BorderBrush="#3A3A3A" BorderThickness="0,1,0,0">
+                    <DockPanel Margin="8,2">
+                        <StackPanel Orientation="Horizontal">
+                            <Button Style="{StaticResource QuietButton}" Click="OnNewLayer" ToolTip="New blank layer (Ctrl+Shift+N)" x:Name="NewLayerButton"/>
+                            <Button Style="{StaticResource QuietButton}" Click="OnGroup" ToolTip="Group layer" x:Name="GroupLayerButton"/>
+                            <Button Style="{StaticResource QuietButton}" Click="OnMask" ToolTip="Add layer mask" x:Name="MaskLayerButton"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button Style="{StaticResource QuietButton}" Click="OnLayerUp" ToolTip="Move layer up" x:Name="LayerUpButton"/>
+                            <Button Style="{StaticResource QuietButton}" Click="OnLayerDown" ToolTip="Move layer down" x:Name="LayerDownButton"/>
+                            <Button Style="{StaticResource QuietButton}" Click="OnDeleteLayer" ToolTip="Delete layer" x:Name="DeleteLayerButton"/>
+                        </StackPanel>
+                    </DockPanel>
+                </Border>
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel x:Name="LayerHost"/>
+                </ScrollViewer>
+            </DockPanel>
+        </Grid>
+    </DockPanel>
+</Window>
