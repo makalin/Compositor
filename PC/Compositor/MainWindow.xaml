@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:Compositor"
-        Title="Compositor" Width="1280" Height="960" MinWidth="960" MinHeight="720"
+        Title="Compositor" Icon="AppIcon.ico" Width="1280" Height="960" MinWidth="960" MinHeight="720"
         Background="#242424" Foreground="#F2F2F2" WindowStartupLocation="CenterScreen"
         PreviewKeyDown="OnPreviewKeyDown" KeyUp="OnKeyUp" AllowDrop="True" Drop="OnDrop" DragOver="OnDragOver">
     <DockPanel>

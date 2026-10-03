@@ -8,7 +8,13 @@
     <RootNamespace>Compositor</RootNamespace>
     <AssemblyName>Compositor</AssemblyName>
     <ApplicationTitle>Compositor</ApplicationTitle>
+    <Version>1.2.3</Version>
+    <ApplicationIcon>AppIcon.ico</ApplicationIcon>
   </PropertyGroup>
+  <ItemGroup>
+    <Content Remove="AppIcon.ico" />
+    <Resource Include="AppIcon.ico" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Compositor.Core\Compositor.Core.csproj" />
   </ItemGroup>
